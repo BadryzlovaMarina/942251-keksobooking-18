@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг» [![Build status][travis-image]][travis-url]
 
 * Студент: [Марина](https://up.htmlacademy.ru/javascript/18/user/942251).
-* Наставник: `Неизвестно`.
+* Наставник: [Черкасов Артем].
 
 ---
 
