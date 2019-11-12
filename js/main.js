@@ -62,7 +62,7 @@ var getAdvertsArray = function (adCount) {
         checkin: getRandomInt(checkIn),
         checkout: getRandomInt(checkOut),
         features: getRandomArray(features),
-        description: '',
+        description: 'description',
         photos: getRandomArray(photos)
       },
       location: {
@@ -224,6 +224,19 @@ var housingTypeSelect = adForm.querySelector('#type');
 var housingPriceSelect = adForm.querySelector('#price');
 var adFormSubmit = adForm.querySelector('.ad-form__submit');
 
+timeInSelect.addEventListener('change', function () {
+  timeOutSelect.value = timeInSelect.value;
+});
+
+timeOutSelect.addEventListener('change', function () {
+  timeInSelect.value = timeOutSelect.value;
+});
+
+housingTypeSelect.addEventListener('change', function () {
+  housingPriceSelect.placeholder = housingTypePrice[housingTypeSelect.value].price;
+  housingPriceSelect.min = housingTypePrice[housingTypeSelect.value].price;
+});
+
 var customValidation = function () {
   var roomsValue = Number(adFormRooms.options[adFormRooms.selectedIndex].value);
   var guestsValue = Number(adFormCapacity.options[adFormCapacity.selectedIndex].value);
@@ -240,27 +253,12 @@ var customValidation = function () {
   } else {
     adFormCapacity.setCustomValidity('');
   }
-
-  timeInSelect.addEventListener('change', function () {
-    timeOutSelect.value = timeInSelect.value;
-  });
-
-  timeOutSelect.addEventListener('change', function () {
-    timeInSelect.value = timeOutSelect.value;
-  });
-
-  housingTypeSelect.addEventListener('change', function () {
-    housingPriceSelect.placeholder = housingTypePrice[housingTypeSelect.value].price;
-    housingPriceSelect.min = housingTypePrice[housingTypeSelect.value].price;
-  });
-
 };
 
 adFormSubmit.addEventListener('click', function () {
   customValidation();
 });
 
-var cardFragment = document.createDocumentFragment();
 var filtersBloc = map.querySelector('.map__filters-container');
 
 var deactivatePin = function () {
@@ -276,7 +274,7 @@ var hidePopup = function (popup) {
 };
 
 var getCurrentAd = function (adItem) {
-  cardFragment.appendChild(createCard(adItem));
+  var cardFragment = createCard(adItem);
   var currentMapPopup = map.querySelector('.map__card');
 
   if (!currentMapPopup) {
@@ -306,7 +304,6 @@ var activatePin = function (adItem, pin) {
 
   pin.classList.add('map__pin--active');
   getCurrentAd(adItem);
-  fillAddressInput(pin);
 };
 
 var createPin = function (pin) {
