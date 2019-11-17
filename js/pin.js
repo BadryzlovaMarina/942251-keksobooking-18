@@ -34,7 +34,7 @@
     pinListElement.appendChild(fragment);
   };
 
-   var loadPins = function () {
+  var loadPins = function () {
     window.backend.load(window.messages.onLoad, window.messages.onError);
   };
 

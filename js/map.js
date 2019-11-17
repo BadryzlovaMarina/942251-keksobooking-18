@@ -63,11 +63,10 @@
         if (currentCoords.y >= PIN_LIMITS.yMin
           && currentCoords.y <= PIN_LIMITS.yMax
           && currentCoords.x >= mapOverlay.clientLeft
-          && currentCoords.x <= (mapOverlay.clientLeft + mapOverlay.clientWidth - mapPin.clientWidth)
-          ){
-            mapPin.style.top = currentCoords.y + 'px';
-            mapPin.style.left = currentCoords.x + 'px';
-          }
+          && currentCoords.x <= (mapOverlay.clientLeft + mapOverlay.clientWidth - mapPin.clientWidth)) {
+          mapPin.style.top = currentCoords.y + 'px';
+          mapPin.style.left = currentCoords.x + 'px';
+        }
         fillAddressInput();
       };
 
