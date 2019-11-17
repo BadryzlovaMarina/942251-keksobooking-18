@@ -34,8 +34,13 @@
     pinListElement.appendChild(fragment);
   };
 
+   var loadPins = function () {
+    window.backend.load(window.messages.onLoad, window.messages.onError);
+  };
+
   window.pin = {
-    renderPins: renderPins
+    renderPins: renderPins,
+    loadPins: loadPins
   };
 
 })();
