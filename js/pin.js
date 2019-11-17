@@ -26,16 +26,16 @@
     return pinElement;
   };
 
-  var renderPin = function (pin) {
+  var renderPins = function (pins) {
     var fragment = document.createDocumentFragment();
-    for (var i = 0; i < pin.length; i++) {
-      fragment.appendChild(createPin(pin[i]));
+    for (var i = 0; i < pins.length; i++) {
+      fragment.appendChild(createPin(pins[i]));
     }
     pinListElement.appendChild(fragment);
   };
 
   window.pin = {
-    renderPin: renderPin
+    renderPins: renderPins
   };
 
 })();

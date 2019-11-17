@@ -12,7 +12,8 @@
   var features = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
   var photos = ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg'];
   var advertCounts = 8;
-  var locations = {WIDTH: 65, MIN_X: 0, MAX_X: 1200, MIN_Y: 130, MAX_Y: 630};
+  var locations = {MIN_X: 0, MAX_X: 1200, MIN_Y: 130, MAX_Y: 630};
+  var pinSizes = {WIDTH: 65, HEIGHT: 65};
 
   var housingTypePrice = {
     bungalo: {
@@ -83,7 +84,7 @@
           photos: getRandomArray(photos)
         },
         location: {
-          x: getRandomIntInclusive(locations.MIN_X, locations.MAX_X - locations.WIDTH),
+          x: getRandomIntInclusive(locations.MIN_X, locations.MAX_X - pinSizes.WIDTH),
           y: getRandomIntInclusive(locations.MIN_Y, locations.MAX_Y),
         }
       };
@@ -97,7 +98,11 @@
     adverts: adverts,
     roomCapacity: roomCapacity,
     housingTypePrice: housingTypePrice,
-    map: map
+    locations: locations,
+    map: map,
+    MIN_Y: locations.MIN_Y,
+    MAX_Y: locations.MAX_Y,
+    PIN_HEIGHT: pinSizes.HEIGHT
   };
 
 })();

@@ -37,18 +37,6 @@
     enableElement('fieldset');
   };
 
-  var getCoordinates = function (element) {
-    var heightScale = window.util.activeMode ? 1 : 2;
-    element.top = Math.round(element.offsetTop + element.offsetHeight / heightScale);
-    element.left = Math.round(element.offsetLeft + element.offsetWidth / 2);
-    return element;
-  };
-
-  var fillAddressInput = function (pin) {
-    var coordinates = getCoordinates(pin);
-    adFormAddress.value = coordinates.left + ', ' + coordinates.top;
-  };
-
   timeInSelect.addEventListener('change', function () {
     timeOutSelect.value = timeInSelect.value;
   });
@@ -87,7 +75,7 @@
   window.form = {
     disableForm: disableForm,
     enableForm: enableForm,
-    fillAddressInput: fillAddressInput
+    adFormAddress: adFormAddress
   };
 
 })();
