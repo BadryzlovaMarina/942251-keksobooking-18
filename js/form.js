@@ -3,14 +3,21 @@
 (function () {
 
   var adForm = document.querySelector('.ad-form');
-  var adFormAddress = adForm.querySelector('#address');
-  var adFormRooms = adForm.querySelector('#room_number');
-  var adFormCapacity = adForm.querySelector('#capacity');
-  var timeInSelect = adForm.querySelector('#timein');
-  var timeOutSelect = adForm.querySelector('#timeout');
-  var housingTypeSelect = adForm.querySelector('#type');
-  var housingPriceSelect = adForm.querySelector('#price');
-  var adFormSubmit = adForm.querySelector('.ad-form__submit');
+  var addressInputElement = adForm.querySelector('#address');
+  var roomNumberElement = adForm.querySelector('#room_number');
+  var capacityElement = adForm.querySelector('#capacity');
+  var timeInElement = adForm.querySelector('#timein');
+  var timeOutElement = adForm.querySelector('#timeout');
+  var housingTypeElement = adForm.querySelector('#type');
+  var priceElement = adForm.querySelector('#price');
+  var submitButton = adForm.querySelector('.ad-form__submit');
+  var titleElement = adForm.querySelector('#title');
+  var descriptionElement = adForm.querySelector('#description');
+  var optionElements = adForm.querySelectorAll('option');
+  var featureElements = adForm.querySelectorAll('[type="checkbox"]');
+  var resetButton = adForm.querySelector('.ad-form__reset');
+  var formDisabledClass = 'ad-form--disabled';
+  var DEFAULT_HOUSING_PRICE = 1000;
 
   var disableElement = function (element) {
     var elements = document.querySelectorAll(element);
@@ -35,47 +42,117 @@
     adForm.classList.remove('ad-form--disabled');
     enableElement('select');
     enableElement('fieldset');
+    adForm.classList.remove(formDisabledClass);
+    adForm.addEventListener('submit', onSubmit);
+    resetButton.addEventListener('click', onReset);
   };
 
-  timeInSelect.addEventListener('change', function () {
-    timeOutSelect.value = timeInSelect.value;
+  timeInElement.addEventListener('change', function () {
+    timeOutElement.value = timeInElement.value;
   });
 
-  timeOutSelect.addEventListener('change', function () {
-    timeInSelect.value = timeOutSelect.value;
+  timeOutElement.addEventListener('change', function () {
+    timeInElement.value = timeOutElement.value;
   });
 
-  housingTypeSelect.addEventListener('change', function () {
-    housingPriceSelect.placeholder = window.data.housingTypePrice[housingTypeSelect.value].price;
-    housingPriceSelect.min = window.data.housingTypePrice[housingTypeSelect.value].price;
+  housingTypeElement.addEventListener('change', function () {
+    priceElement.placeholder = window.data.housingTypePrice[housingTypeElement.value].price;
+    priceElement.min = window.data.housingTypePrice[housingTypeElement.value].price;
   });
 
   var customValidation = function () {
-    var roomsValue = Number(adFormRooms.options[adFormRooms.selectedIndex].value);
-    var guestsValue = Number(adFormCapacity.options[adFormCapacity.selectedIndex].value);
+    var roomsValue = Number(roomNumberElement.options[roomNumberElement.selectedIndex].value);
+    var guestsValue = Number(capacityElement.options[capacityElement.selectedIndex].value);
     var acceptableNumber = window.data.roomCapacity[roomsValue];
     var maxGuests = acceptableNumber[acceptableNumber.length - 1];
     var minGuests = acceptableNumber[0];
 
     if ((guestsValue > maxGuests) && (roomsValue < 100)) {
-      adFormCapacity.setCustomValidity('Максимальное кол-во гостей ' + maxGuests);
+      capacityElement.setCustomValidity('Максимальное кол-во гостей ' + maxGuests);
     } else if (guestsValue > maxGuests) {
-      adFormCapacity.setCustomValidity('Выбор не для гостей');
+      capacityElement.setCustomValidity('Выбор не для гостей');
     } else if (guestsValue < minGuests) {
-      adFormCapacity.setCustomValidity('Выбрать кол-во гостей');
+      capacityElement.setCustomValidity('Выбрать кол-во гостей');
     } else {
-      adFormCapacity.setCustomValidity('');
+      capacityElement.setCustomValidity('');
     }
   };
 
-  adFormSubmit.addEventListener('click', function () {
+  submitButton.addEventListener('click', function () {
     customValidation();
   });
+
+  var onSave = function () {
+    window.messages.showSuccessMessage();
+    resetForm();
+    inactiveModeOn();
+  };
+
+  var onSubmit = function (evt) {
+    window.backend.load(onSave, window.messages.onError, new FormData(adForm));
+    evt.preventDefault();
+  };
+
+  var onReset = function () {
+    resetForm();
+    inactiveModeOn();
+  };
+
+  var resetHousingPrice = function () {
+    priceElement.placeholder = DEFAULT_HOUSING_PRICE;
+    priceElement.min = DEFAULT_HOUSING_PRICE;
+  };
+
+  var resetForm = function () {
+    titleElement.value = '';
+    priceElement.value = '';
+    descriptionElement.value = '';
+
+    optionElements.forEach(function (el) {
+      el.selected = el.defaultSelected;
+    });
+
+    featureElements.forEach(function (el) {
+      el.checked = el.defaultChecked;
+    });
+
+    resetHousingPrice();
+
+    adForm.removeEventListener('submit', onSubmit);
+  };
+
+  var hidePopup = function () {
+    var popup = window.data.map.querySelector('.popup');
+    if (popup) {
+      popup.remove();
+    }
+  };
+
+  var inactivateMap = function () {
+    hidePopup();
+    window.util.activeMode = false;
+    window.data.map.classList.add(window.util.FADED);
+    window.pin.deletePins();
+    window.map.inactiveMapListeners();
+    window.map.setDefaultMainPin();
+  };
+
+  var inactivateForm = function () {
+    adForm.classList.add(formDisabledClass);
+    resetButton.removeEventListener('click', onReset);
+  };
+
+  var inactiveModeOn = function () {
+    inactivateMap();
+    disableForm();
+    inactivateForm();
+  };
 
   window.form = {
     disableForm: disableForm,
     enableForm: enableForm,
-    adFormAddress: adFormAddress
+    addressInputElement: addressInputElement,
+    onSave: onSave
   };
 
 })();
