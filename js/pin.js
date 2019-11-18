@@ -2,9 +2,21 @@
 
 (function () {
 
+  var mainElement = document.querySelector('main');
   var pinTemplate = document.querySelector('#pin').content;
   var pinTemplateElement = pinTemplate.querySelector('.map__pin');
   var pinListElement = document.querySelector('.map__pins');
+
+  var PINS_NUMBER_LIMIT = 5;
+
+  var countPins = function (pins) {
+    if (pins.length < PINS_NUMBER_LIMIT) {
+      var pinsNumber = pins.length;
+    } else {
+      pinsNumber = PINS_NUMBER_LIMIT;
+    }
+    return pinsNumber;
+  };
 
   var createPin = function (pin) {
     var pinElement = pinTemplateElement.cloneNode(true);
@@ -27,20 +39,34 @@
   };
 
   var renderPins = function (pins) {
+    var pinsNumber = countPins(pins);
     var fragment = document.createDocumentFragment();
-    for (var i = 0; i < pins.length; i++) {
+    for (var i = 0; i < pinsNumber; i++) {
       fragment.appendChild(createPin(pins[i]));
     }
     pinListElement.appendChild(fragment);
   };
 
+  var onLoad = function (data) {
+    renderPins(data);
+  };
+
   var loadPins = function () {
-    window.backend.load(window.messages.onLoad, window.messages.onError);
+    window.backend.load(onLoad, window.messages.onError);
+  };
+
+  var deletePins = function () {
+    var pins = pinListElement.querySelectorAll('.map__pin:not(.map__pin--main)');
+    for (var i = 0; i < pins.length; i++) {
+      pins[i].parentNode.removeChild(pins[i]);
+    }
   };
 
   window.pin = {
-    renderPins: renderPins,
-    loadPins: loadPins
+    mainElement: mainElement,
+    loadPins: loadPins,
+    onLoad: onLoad,
+    deletePins: deletePins
   };
 
 })();

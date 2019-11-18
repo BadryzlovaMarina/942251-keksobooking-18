@@ -2,22 +2,46 @@
 
 (function () {
 
-  var onLoad = function (data) {
-    window.pin.renderPins(data);
+  var showSuccessMessage = function () {
+    var successMessageTemplate = document.querySelector('#success').content.querySelector('.success');
+    var successElement = successMessageTemplate.cloneNode(true);
+    window.pin.mainElement.appendChild(successElement);
+    successElement.classList.add('message');
+    document.addEventListener('click', onMessageClick);
+    document.addEventListener('keydown', onMessageEscPress);
   };
 
-  var onError = function (errorMessage) {
-    var mainElement = document.querySelector('main');
+  var onMessageClick = function () {
+    closeMessage();
+  };
+  var onMessageEscPress = function (evt) {
+    if (evt.keyCode === window.util.ESC_KEYCODE) {
+      closeMessage();
+    }
+  };
+
+  var closeMessage = function () {
+    var element = document.querySelector('.message');
+    element.remove();
+    document.removeEventListener('click', onMessageClick);
+    document.removeEventListener('keydown', onMessageEscPress);
+  };
+
+  var onError = function (actionType, errorMessage) {
     var errorTemplate = document.querySelector('#error').content.querySelector('.error');
     var errorElement = errorTemplate.cloneNode(true);
     var errorButton = errorElement.querySelector('.error__button');
 
     errorElement.querySelector('.error__message').textContent = errorMessage;
-    mainElement.appendChild(errorElement);
+    window.pin.mainElement.appendChild(errorElement);
 
     var onErrorButtonClick = function () {
-      window.backend.load(onLoad, onError);
-      mainElement.removeChild(errorElement);
+      if (actionType === 'load') {
+        window.backend.load(window.pin.onLoad, onError);
+      } else {
+        window.backend.load(window.form.onSave, onError);
+      }
+      window.pin.mainElement.removeChild(errorElement);
     };
 
     errorButton.addEventListener('click', onErrorButtonClick);
@@ -25,7 +49,7 @@
 
   window.messages = {
     onError: onError,
-    onLoad: onLoad
+    showSuccessMessage: showSuccessMessage
   };
 
 })();
