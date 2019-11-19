@@ -2,16 +2,17 @@
 
 (function () {
 
+  var HeightScalePin = {INACTIVE: 1, ACTIVE: 2};
+
   var mapFilter = window.data.map.querySelector('.map__filters');
   var mapPin = window.data.map.querySelector('.map__pin--main');
   var mapOverlay = document.querySelector('.map__overlay');
-  var heightScalePin = {INACTIVE: 1, ACTIVE: 2};
 
   var getMainPinCoordinates = function () {
-    var heightScale = window.util.activeMode ? heightScalePin.INACTIVE : heightScalePin.ACTIVE;
+    var heightScale = window.util.activeMode ? HeightScalePin.INACTIVE : HeightScalePin.ACTIVE;
     return {
       top: Math.round(mapPin.offsetTop + mapPin.offsetHeight / heightScale),
-      left: Math.round(mapPin.offsetLeft + mapPin.offsetWidth / heightScalePin.ACTIVE),
+      left: Math.round(mapPin.offsetLeft + mapPin.offsetWidth / HeightScalePin.ACTIVE),
     };
   };
 

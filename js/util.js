@@ -4,8 +4,8 @@
 
   var ENTER_KEYCODE = 13;
   var ESC_KEYCODE = 27;
-  var activeMode = false;
   var FADED = 'map--faded';
+  var activeMode = false;
 
   window.util = {
     activeMode: activeMode,

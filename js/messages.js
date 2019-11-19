@@ -2,13 +2,22 @@
 
 (function () {
 
+  var mainElement = document.querySelector('main');
+
   var showSuccessMessage = function () {
     var successMessageTemplate = document.querySelector('#success').content.querySelector('.success');
     var successElement = successMessageTemplate.cloneNode(true);
-    window.pin.mainElement.appendChild(successElement);
+    mainElement.appendChild(successElement);
     successElement.classList.add('message');
     document.addEventListener('click', onMessageClick);
     document.addEventListener('keydown', onMessageEscPress);
+  };
+
+  var closeMessage = function () {
+    var element = document.querySelector('.message');
+    element.remove();
+    document.removeEventListener('click', onMessageClick);
+    document.removeEventListener('keydown', onMessageEscPress);
   };
 
   var onMessageClick = function () {
@@ -20,31 +29,32 @@
     }
   };
 
-  var closeMessage = function () {
-    var element = document.querySelector('.message');
-    element.remove();
-    document.removeEventListener('click', onMessageClick);
-    document.removeEventListener('keydown', onMessageEscPress);
+  var closeErrorBlock = function () {
+    var pageMain = document.querySelector('main');
+    var error = pageMain.querySelector('.error');
+    error.remove();
+    document.removeEventListener('keydown', onErrorEsc);
   };
 
-  var onError = function (actionType, errorMessage) {
+  var onErrorEsc = function (evt) {
+    if (evt.keyCode === window.util.ESC_KEYCODE) {
+      closeErrorBlock();
+    }
+  };
+
+  var onErrorClick = function () {
+    closeErrorBlock();
+  };
+
+  var onError = function (errorMessage) {
     var errorTemplate = document.querySelector('#error').content.querySelector('.error');
     var errorElement = errorTemplate.cloneNode(true);
-    var errorButton = errorElement.querySelector('.error__button');
 
     errorElement.querySelector('.error__message').textContent = errorMessage;
-    window.pin.mainElement.appendChild(errorElement);
+    mainElement.appendChild(errorElement);
 
-    var onErrorButtonClick = function () {
-      if (actionType === 'load') {
-        window.backend.load(window.pin.onLoad, onError);
-      } else {
-        window.backend.load(window.form.onSave, onError);
-      }
-      window.pin.mainElement.removeChild(errorElement);
-    };
-
-    errorButton.addEventListener('click', onErrorButtonClick);
+    errorElement.addEventListener('click', onErrorClick);
+    document.addEventListener('keydown', onErrorEsc);
   };
 
   window.messages = {

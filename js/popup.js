@@ -19,8 +19,11 @@
     }
   };
 
-  var hidePopup = function (popup) {
-    popup.style.display = 'none';
+  var hidePopup = function () {
+    var popup = window.data.map.querySelector('.popup');
+    if (popup) {
+      popup.remove();
+    }
   };
 
   var getCurrentAd = function (adItem) {
@@ -33,24 +36,24 @@
       window.data.map.replaceChild(cardFragment, currentMapPopup);
     }
 
-    var mapPopup = window.data.map.querySelector('.popup');
-    var mapPopupClose = mapPopup.querySelector('.popup__close');
+    var mapPopupClose = window.data.map.querySelector('.popup__close');
 
     mapPopupClose.addEventListener('click', function () {
-      hidePopup(mapPopup);
+      hidePopup();
       deactivatePin();
     });
 
     document.addEventListener('keydown', function (evt) {
       if (evt.keyCode === window.util.ESC_KEYCODE) {
-        hidePopup(mapPopup);
+        hidePopup();
         deactivatePin();
       }
     });
   };
 
   window.popup = {
-    activatePin: activatePin
+    activatePin: activatePin,
+    hidePopup: hidePopup
   };
 
 })();
