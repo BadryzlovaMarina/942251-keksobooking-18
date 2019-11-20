@@ -2,7 +2,7 @@
 
 (function () {
 
-  var URL_LOAD = 'https://jjs.dump.academy/keksobooking/data';
+  var URL_LOAD = 'https://js.dump.academy/keksobooking/data';
   var URL_SAVE = 'https://js.dump.academy/keksobooking';
   var TIMEOUT = 10000;
   var SUCCESS_RESPONSE = 200;
