@@ -361,6 +361,10 @@ fieldset {
   opacity: 0;
 }
 
+.map__filters--faded {
+  opacity: 0;
+}
+
 .map__filter {
   height: 30px;
   margin-right: 10px;

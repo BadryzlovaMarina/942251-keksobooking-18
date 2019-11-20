@@ -19,15 +19,30 @@
     }
   };
 
+  var onPopupCloseButtonClick = function () {
+    hidePopup();
+    deactivatePin();
+  };
+
+  var onPopupEscPress = function (evt) {
+    if (evt.keyCode === window.util.ESC_KEYCODE) {
+      hidePopup();
+      deactivatePin();
+    }
+  };
+
   var hidePopup = function () {
     var popup = window.data.map.querySelector('.popup');
     if (popup) {
+      var popupButtonClose = popup.querySelector('.popup__close');
+      popupButtonClose.removeEventListener('click', onPopupCloseButtonClick);
+      document.removeEventListener('keydown', onPopupEscPress);
       popup.remove();
     }
   };
 
   var getCurrentAd = function (adItem) {
-    var cardFragment = window.card.createCard(adItem);
+    var cardFragment = window.card.create(adItem);
     var currentMapPopup = window.data.map.querySelector('.map__card');
 
     if (!currentMapPopup) {
@@ -36,24 +51,15 @@
       window.data.map.replaceChild(cardFragment, currentMapPopup);
     }
 
-    var mapPopupClose = window.data.map.querySelector('.popup__close');
+    var popupButtonClose = window.data.map.querySelector('.popup__close');
 
-    mapPopupClose.addEventListener('click', function () {
-      hidePopup();
-      deactivatePin();
-    });
-
-    document.addEventListener('keydown', function (evt) {
-      if (evt.keyCode === window.util.ESC_KEYCODE) {
-        hidePopup();
-        deactivatePin();
-      }
-    });
+    popupButtonClose.addEventListener('click', onPopupCloseButtonClick);
+    document.addEventListener('keydown', onPopupEscPress);
   };
 
   window.popup = {
     activatePin: activatePin,
-    hidePopup: hidePopup
+    hide: hidePopup
   };
 
 })();

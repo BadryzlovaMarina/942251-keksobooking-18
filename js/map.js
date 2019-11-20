@@ -2,17 +2,17 @@
 
 (function () {
 
-  var HeightScalePin = {INACTIVE: 1, ACTIVE: 2};
+  var ScalePin = {INACTIVE: 1, ACTIVE: 2};
 
   var mapFilter = window.data.map.querySelector('.map__filters');
   var mapPin = window.data.map.querySelector('.map__pin--main');
   var mapOverlay = document.querySelector('.map__overlay');
 
   var getMainPinCoordinates = function () {
-    var heightScale = window.util.activeMode ? HeightScalePin.INACTIVE : HeightScalePin.ACTIVE;
+    var heightScale = window.util.activeMode ? ScalePin.INACTIVE : ScalePin.ACTIVE;
     return {
       top: Math.round(mapPin.offsetTop + mapPin.offsetHeight / heightScale),
-      left: Math.round(mapPin.offsetLeft + mapPin.offsetWidth / HeightScalePin.ACTIVE),
+      left: Math.round(mapPin.offsetLeft + mapPin.offsetWidth / ScalePin.ACTIVE),
     };
   };
 
@@ -27,7 +27,7 @@
     }
   };
 
-  var inactiveMapListeners = function () {
+  var inactivateMapListeners = function () {
     mapPin.addEventListener('mousedown', onMainPinMouseDown);
     mapPin.addEventListener('keydown', onMainPinEnterPress);
   };
@@ -75,8 +75,8 @@
 
         if (currentCoords.y >= PIN_LIMITS.yMin
           && currentCoords.y <= PIN_LIMITS.yMax
-          && currentCoords.x >= mapOverlay.clientLeft
-          && currentCoords.x <= (mapOverlay.clientLeft + mapOverlay.clientWidth - mapPin.clientWidth)) {
+          && currentCoords.x >= (mapOverlay.clientLeft - mapPin.clientWidth / ScalePin.ACTIVE)
+          && currentCoords.x <= (mapOverlay.clientLeft + mapOverlay.clientWidth - mapPin.clientWidth / ScalePin.ACTIVE)) {
           mapPin.style.top = currentCoords.y + 'px';
           mapPin.style.left = currentCoords.x + 'px';
         }
@@ -109,16 +109,17 @@
     mapFilter.classList.remove('map__filters--disabled');
     window.util.activeMode = true;
     fillAddressInput();
-    window.form.enableForm();
-    window.pin.loadPins();
+    window.form.enable();
+    window.pin.load();
     mapPin.removeEventListener('keydown', onMainPinEnterPress);
   };
 
   var defaultMainPinCoords = {};
   var init = function () {
-    window.form.disableForm();
+    window.pin.mapFilters.classList.add('map__filters--faded');
+    window.form.disable();
     fillAddressInput();
-    inactiveMapListeners();
+    inactivateMapListeners();
     defaultMainPinCoords = {
       x: mapPin.style.left,
       y: mapPin.style.top,
@@ -128,7 +129,7 @@
   init();
 
   window.map = {
-    inactiveMapListeners: inactiveMapListeners,
+    inactivateListeners: inactivateMapListeners,
     setDefaultMainPin: setDefaultMainPin
   };
 

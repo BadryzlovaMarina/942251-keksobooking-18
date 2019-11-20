@@ -45,7 +45,7 @@
   };
 
   var loadPins = function () {
-    window.backend.load(onSuccessPinsLoad, window.messages.onError);
+    window.backend.load(onSuccessPinsLoad, window.messages.onErrorLoad);
   };
 
   var deletePins = function () {
@@ -58,6 +58,7 @@
   var onSuccessPinsLoad = function (data) {
     pinsData = data;
     renderPins(pinsData);
+    mapFilters.classList.remove('map__filters--faded');
   };
 
   var filterTypes = {
@@ -102,16 +103,16 @@
 
     filterElements = Array.from(mapFilters.children);
     deletePins();
-    window.popup.hidePopup();
+    window.popup.hide();
     renderPins(getFilterData(pinsData, filterElements));
   });
 
   mapFilters.addEventListener('change', onFormFiltersChange);
 
   window.pin = {
-    deletePins: deletePins,
+    delete: deletePins,
     mapFilters: mapFilters,
-    loadPins: loadPins
+    load: loadPins
   };
 
 })();

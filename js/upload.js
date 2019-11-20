@@ -10,11 +10,11 @@
     HEIGHT: 70
   };
 
-  var avatarUploaderElement = window.form.adForm.querySelector('.ad-form-header__input');
-  var avatarPreviewElement = window.form.adForm.querySelector('.ad-form-header__preview img');
+  var avatarUploaderElement = window.form.ad.querySelector('.ad-form-header__input');
+  var avatarPreviewElement = window.form.ad.querySelector('.ad-form-header__preview img');
   var defaultAvatarPreview = avatarPreviewElement.src;
-  var housingUploaderElement = window.form.adForm.querySelector('.ad-form__input');
-  var housingImgElement = window.form.adForm.querySelector('.ad-form__photo');
+  var housingUploaderElement = window.form.ad.querySelector('.ad-form__input');
+  var housingImgElement = window.form.ad.querySelector('.ad-form__photo');
   var housingImg = document.createElement('img');
 
   housingImg.alt = HousingImgAttributes.ALT;
@@ -65,7 +65,7 @@
   };
 
   window.photo = {
-    resetUploadedImg: resetUploadedImg
+    reset: resetUploadedImg
   };
 
 })();

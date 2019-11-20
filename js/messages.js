@@ -4,7 +4,7 @@
 
   var mainElement = document.querySelector('main');
 
-  var showSuccessMessage = function () {
+  var onSuccessLoad = function () {
     var successMessageTemplate = document.querySelector('#success').content.querySelector('.success');
     var successElement = successMessageTemplate.cloneNode(true);
     mainElement.appendChild(successElement);
@@ -31,9 +31,10 @@
 
   var closeErrorBlock = function () {
     var pageMain = document.querySelector('main');
-    var error = pageMain.querySelector('.error');
-    error.remove();
+    var errorElement = pageMain.querySelector('.error');
+    errorElement.remove();
     document.removeEventListener('keydown', onErrorEsc);
+    errorElement.removeEventListener('click', onErrorClick);
   };
 
   var onErrorEsc = function (evt) {
@@ -46,7 +47,7 @@
     closeErrorBlock();
   };
 
-  var onError = function (errorMessage) {
+  var onErrorLoad = function (errorMessage) {
     var errorTemplate = document.querySelector('#error').content.querySelector('.error');
     var errorElement = errorTemplate.cloneNode(true);
 
@@ -58,8 +59,8 @@
   };
 
   window.messages = {
-    onError: onError,
-    showSuccessMessage: showSuccessMessage
+    onErrorLoad: onErrorLoad,
+    onSuccessLoad: onSuccessLoad
   };
 
 })();

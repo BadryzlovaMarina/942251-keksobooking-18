@@ -37,7 +37,7 @@
   var PriceValues = {
     low: {
       start: 0,
-      end: 1000
+      end: 10000
     },
 
     middle: {

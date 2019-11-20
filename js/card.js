@@ -23,10 +23,10 @@
   var createList = function (element, list, offer) {
     var fragment = document.createDocumentFragment();
     element.innerHTML = '';
-    for (var i = 0; i < list.length; i++) {
-      var item = (offer === 'photos') ? createPhoto(list[i]) : createFeature(list[i]);
+    list.forEach(function (el) {
+      var item = (offer === 'photos') ? createPhoto(el) : createFeature(el);
       fragment.appendChild(item);
-    }
+    });
     element.appendChild(fragment);
   };
 
@@ -50,7 +50,7 @@
   };
 
   window.card = {
-    createCard: createCard
+    create: createCard
   };
 
 })();

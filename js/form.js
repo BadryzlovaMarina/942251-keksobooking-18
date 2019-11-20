@@ -23,16 +23,16 @@
 
   var disableElement = function (element) {
     var elements = document.querySelectorAll(element);
-    for (var i = 0; i < elements.length; i++) {
-      elements[i].disabled = true;
-    }
+    elements.forEach(function (el) {
+      el.disabled = true;
+    });
   };
 
   var enableElement = function (element) {
     var elements = document.querySelectorAll(element);
-    for (var i = 0; i < elements.length; i++) {
-      elements[i].disabled = false;
-    }
+    elements.forEach(function (el) {
+      el.disabled = false;
+    });
   };
 
   var disableForm = function () {
@@ -85,19 +85,20 @@
   });
 
   var onSave = function () {
-    window.messages.showSuccessMessage();
+    window.messages.onSuccessLoad();
     resetForm();
-    inactiveModeOn();
+    inactivateModeOn();
   };
 
   var onSubmit = function (evt) {
-    window.backend.load(onSave, window.messages.onError, new FormData(adForm));
     evt.preventDefault();
+    window.backend.load(onSave, window.messages.onErrorLoad, new FormData(adForm));
   };
 
-  var onReset = function () {
+  var onReset = function (evt) {
+    evt.preventDefault();
     resetForm();
-    inactiveModeOn();
+    inactivateModeOn();
   };
 
   var resetHousingPrice = function () {
@@ -126,13 +127,13 @@
   };
 
   var inactivateMap = function () {
-    window.popup.hidePopup();
+    window.popup.hide();
     window.util.activeMode = false;
     window.data.map.classList.add(window.util.FADED);
-    window.pin.deletePins();
-    window.map.inactiveMapListeners();
+    window.pin.delete();
+    window.map.inactivateListeners();
     window.map.setDefaultMainPin();
-    window.photo.resetUploadedImg();
+    window.photo.reset();
   };
 
   var inactivateForm = function () {
@@ -140,16 +141,16 @@
     resetButtonElement.removeEventListener('click', onReset);
   };
 
-  var inactiveModeOn = function () {
+  var inactivateModeOn = function () {
     inactivateMap();
     disableForm();
     inactivateForm();
   };
 
   window.form = {
-    adForm: adForm,
-    disableForm: disableForm,
-    enableForm: enableForm,
+    ad: adForm,
+    disable: disableForm,
+    enable: enableForm,
     addressInputElement: addressInputElement,
     onSave: onSave
   };
